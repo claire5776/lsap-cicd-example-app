@@ -1,6 +1,10 @@
 pipeline {
     agent any
 
+    tools {
+        nodejs "NodeJS 20"
+    }
+
     stages {
         stage('Install dependencies') {
             steps {
@@ -17,7 +21,7 @@ pipeline {
 
     post {
         always {
-            junit '**/test-results.xml' // optional if using Jest JUnit reporter
+            junit '**/test-results.xml'
         }
     }
 }
