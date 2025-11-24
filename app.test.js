@@ -26,7 +26,7 @@ describe("API Endpoints", () => {
     expect(res.statusCode).toEqual(200);
     expect(res.text).toContain("Welcome to the CI/CD Workshop!");
   });
-
+  // test time
   it("should return a 200 OK status and valid ISO-formatted time for /api/time", async () => {
     const res = await request(server).get("/api/time");
     expect(res.statusCode).toEqual(200);
