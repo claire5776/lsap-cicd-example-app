@@ -6,7 +6,7 @@ pipeline {
     }
 
     environment {
-        // Load Slack webhook from Jenkins Credentials
+        // Load Slack incoming webhook from Jenkins Credentials
         SLACK_WEBHOOK = credentials('slack-webhook')
     }
 
