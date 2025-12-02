@@ -1,7 +1,7 @@
 // app.js
 const express = require("express");
 const app = express();
-const unusedVar = "break lint";
+const unusedVar = "test break lint notification";
 
 app.get("/", (req, res) => {
   res
