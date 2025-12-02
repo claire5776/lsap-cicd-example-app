@@ -7,9 +7,10 @@ pipeline {
 
     stages {
 
-        stage('Install dependencies') {
+        stage('Static Analysis') {
             steps {
                 sh 'npm install'
+                sh 'npm run lint'
             }
         }
 
@@ -18,28 +19,30 @@ pipeline {
                 sh 'npm test'
             }
         }
+    }
 
-        stage('Build Docker image') {
-            steps {
-                sh 'docker build -t cicd-app-dev .'
-            }
-        }
+    post {
+        failure {
+            script {
+                def payload = """
+                {
+                    "text": "*CI Build Failed!* :x:
+                    *Name:* Claire Lin
+                    *Student ID:* <INSERT_YOUR_ID>
+                    *Job:* ${env.JOB_NAME}
+                    *Build:* ${env.BUILD_NUMBER}
+                    *Repo:* ${env.GIT_URL}
+                    *Branch:* ${env.BRANCH_NAME}
+                    *Status:* ${currentBuild.currentResult}"
+                }
+                """
 
-        stage('Run container') {
-            steps {
-                sh '''
-                    docker rm -f cicd-dev || true
-                    docker run -d --name cicd-dev -p 8082:3000 cicd-app-dev
-                '''
-            }
-        }
-
-        stage('Health check') {
-            steps {
-                sh 'sleep 3'
-                sh 'curl -f http://localhost:8082/health'
+                sh """
+                curl -X POST -H 'Content-type: application/json' \
+                --data '${payload}' \
+                <YOUR_SLACK_WEBHOOK_URL>
+                """
             }
         }
     }
 }
-
