@@ -5,6 +5,11 @@ pipeline {
         nodejs "NodeJS 25"
     }
 
+    environment {
+        // Load Slack webhook from Jenkins Credentials
+        SLACK_WEBHOOK = credentials('slack-webhook')
+    }
+
     stages {
 
         stage('Static Analysis') {
@@ -28,7 +33,7 @@ pipeline {
                 {
                     "text": "*CI Build Failed!* :x:
                     *Name:* Claire Lin
-                    *Student ID:* <INSERT_YOUR_ID>
+                    *Student ID:* B10705004
                     *Job:* ${env.JOB_NAME}
                     *Build:* ${env.BUILD_NUMBER}
                     *Repo:* ${env.GIT_URL}
@@ -40,7 +45,7 @@ pipeline {
                 sh """
                 curl -X POST -H 'Content-type: application/json' \
                 --data '${payload}' \
-                <YOUR_SLACK_WEBHOOK_URL>
+                $SLACK_WEBHOOK
                 """
             }
         }
