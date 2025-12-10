@@ -42,13 +42,13 @@ pipeline {
 
                     # Wait until container is fully removed
                     for i in {1..10}; do
-                    if ! docker ps -a --format '{{.Names}}' | grep -q '^dev-app$'; then
-                        break
-                    fi
-                    echo "Waiting for dev-app container removal..."
-                    sleep 1
+                        if ! docker ps -a --format '{{.Names}}' | grep -q '^dev-app$'; then
+                            break
+                        fi
+                        echo "Waiting for dev-app container removal..."
+                        sleep 1
                     done
-                    
+
                     docker run -d --name dev-app -p 8081:3000 $DOCKER_USER/$IMAGE_NAME:dev-${BUILD_NUMBER}
 
                     for i in {1..10}; do
