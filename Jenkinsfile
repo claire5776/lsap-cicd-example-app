@@ -68,7 +68,7 @@ pipeline {
                     docker tag $DOCKER_USER/$IMAGE_NAME:\$TARGET_TAG $DOCKER_USER/$IMAGE_NAME:prod-${BUILD_NUMBER}
                     docker push $DOCKER_USER/$IMAGE_NAME:prod-${BUILD_NUMBER}
 
-                    docker rm -f prod-app || echo "Container is already being removed"
+                    docker rm -f prod-app || true
                     sleep 5
                     docker run -d --name prod-app -p 8082:3000 $DOCKER_USER/$IMAGE_NAME:prod-${BUILD_NUMBER}
                     """
