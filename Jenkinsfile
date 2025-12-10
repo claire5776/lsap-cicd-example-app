@@ -40,8 +40,14 @@ pipeline {
                     docker rm -f dev-app || true
                     docker run -d --name dev-app -p 8081:3000 $DOCKER_USER/$IMAGE_NAME:dev-${BUILD_NUMBER}
 
-                    sleep 5
-                    curl -f http://localhost:8081/health
+                    for i in {1..10}; do
+                        if curl -s http://localhost:8081/health; then
+                            echo "dev-app is ready"
+                            break
+                        fi
+                        echo "Waiting for dev-app..."
+                        sleep 2
+                    done
                     """
                 }
             }
